@@ -16,7 +16,7 @@ on:
 
 jobs:
   split-build:
-    name: Build split Docker Images
+    name: Build Python Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -27,16 +27,6 @@ jobs:
         id: sha
         run: echo "short=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
-      - name: Create swap for ARM builds
-        if: github.ref_type == 'tag' # on tagging of releases and prereleases
-        run: |
-          echo "Creating swap file for ARM builds"
-          time sudo dd if=/dev/zero of=/swapfile1 bs=10M count=1000
-          sudo chmod 600 /swapfile1
-          sudo mkswap /swapfile1
-          sudo swapon /swapfile1
-          free -h
-
       - name: Set build platforms
         id: platform
         run: |
@@ -46,7 +36,7 @@ jobs:
               echo "targets=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
               echo "latest=true" >> $GITHUB_OUTPUT
           else
-              echo "targets=linux/amd64" >> $GITHUB_OUTPUT
+              echo "targets=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
               echo "latest=false" >> $GITHUB_OUTPUT
           fi
 
@@ -54,7 +44,6 @@ jobs:
         run: |
           echo ${{ steps.sha.outputs.short }}
           echo ${{ steps.platform.outputs.targets }}
-          echo ${{ steps.platform.outputs.uitag }}
           echo ${{ steps.platform.outputs.latest }}
 
       - name: Docker resotopython meta
@@ -81,7 +70,6 @@ jobs:
         id: qemu
         uses: docker/setup-qemu-action@v2
         with:
-          image: tonistiigi/binfmt:latest
           platforms: arm64,amd64
 
       - name: Set up Docker Buildx
