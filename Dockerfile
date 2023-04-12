@@ -7,7 +7,7 @@ FROM ubuntu:20.04 as build-env
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
-ARG PYTHON_VERSION=3.11.0
+ARG PYTHON_VERSION=3.11.3
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN echo "I am running on ${BUILDPLATFORM}, building for ${TARGETPLATFORM}"
