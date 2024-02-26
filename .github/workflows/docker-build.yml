@@ -46,13 +46,13 @@ jobs:
           echo ${{ steps.platform.outputs.targets }}
           echo ${{ steps.platform.outputs.latest }}
 
-      - name: Docker resotopython meta
+      - name: Docker fixpython meta
         id: pythonmeta
         uses: docker/metadata-action@v4
         with:
           images: |
-            someengineering/resotopython
-            ghcr.io/someengineering/resotopython
+            someengineering/fixpython
+            ghcr.io/someengineering/fixpython
           flavor: |
             latest=${{ steps.platform.outputs.latest }}
           tags: |
@@ -62,8 +62,8 @@ jobs:
             type=sha,prefix=
             type=edge
           labels: |
-            org.opencontainers.image.title=resotopython
-            org.opencontainers.image.description=Resoto Python base image
+            org.opencontainers.image.title=fixpython
+            org.opencontainers.image.description=Fix Inventory Python base image
             org.opencontainers.image.vendor=Some Engineering Inc.
 
       - name: Set up QEMU
@@ -91,7 +91,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push resotopython Docker image
+      - name: Build and push fixpython Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
